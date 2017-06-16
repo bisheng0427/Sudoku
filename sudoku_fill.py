@@ -7,7 +7,10 @@ SUDUKO_SIZE = 9
 NUM_RANGE = list(range(1, 10))
 ORIGIN = {}
 ANSWER = {}
-# initialize question into suduko{}]
+# Initialize question into SUDUKO{}
+# SUDUKO[key] is a list[][]
+# SUDUKO{} contains the questions, query one by select SUDUKO[suduko%i % number]
+# ORIGIN{} like suduko. If ORIGIN[key][][] = 1, means this was set in question
 with open('questions.txt', 'r') as question:
     index = 0
     temp = []
@@ -48,41 +51,29 @@ def print_matrix(dic, key):
     return
 
 
-def exclude_by_row(suduko_name, r, c):
-    if ORIGIN[suduko_name][r][c] == 1:
-        print('Skip this one')
-    else:
-        for colume in range(SUDUKO_SIZE):
-            try:
-                ANSWER[suduko_name][r][c].remove(SUDUKO[suduko_name][r][colume])
-            except ValueError:
-                print('ValueError!')
-            except AttributeError:
-                print('AttributeError')
+def read_row(suduko_name, row):
+    value_list = set()
+    for column in range(SUDUKO_SIZE):
+        value_list.update(str(SUDUKO[suduko_name][row][column]))
+    print(value_list)
     return
 
 
-def exclude_by_colume(suduko_name, r, c):
-    if ORIGIN[suduko_name][r][c] == 1:
-        print('Skip this one')
-    else:
-        for row in range(SUDUKO_SIZE):
-            try:
-                ANSWER[suduko_name][r][c].remove(SUDUKO[suduko_name][row][c])
-            except ValueError:
-                print('ValueError!')
-            except AttributeError:
-                print('AttributeError')
+def read_column(suduko_name, column):
+    value_list = set()
+    for row in range(SUDUKO_SIZE):
+        value_list.update(str(SUDUKO[suduko_name][row][column]))
+    print(value_list)
     return
 
 
-def exclude_by_square(suduko_name, r, c):
+def read_square(suduko_name, r, c):
     square_size = 3  # TODO: update it for further questions
     square0 = []
     if ORIGIN[suduko_name][r][c] == 1:
         print('Skip this one')
     else:
-
+        count = 0
         for row in range(SUDUKO_SIZE):
             try:
                 ANSWER[suduko_name][r][c].remove(SUDUKO[suduko_name][row][c])
@@ -94,19 +85,25 @@ def exclude_by_square(suduko_name, r, c):
 
 
 def main():
-    start_time = datetime.datetime.now()
-    init_answer()
-    print_matrix(SUDUKO, 'suduko0')
-    print_matrix(ANSWER, 'suduko0')
-    print_matrix(ORIGIN, 'suduko0')
-    for r in range(SUDUKO_SIZE):
-        for c in range(SUDUKO_SIZE):
-            exclude_by_row('suduko0', r, c)
-            exclude_by_colume('suduko0', r, c)
-    print_matrix(ANSWER, 'suduko0')
-    end_time = datetime.datetime.now()
-    delta = end_time - start_time
-    print(delta)
+    # start_time = datetime.datetime.now()
+    # init_answer()
+    # print_matrix(SUDUKO, 'suduko0')
+    # print_matrix(ANSWER, 'suduko0')
+    # print_matrix(ORIGIN, 'suduko0')
+    # for r in range(SUDUKO_SIZE):
+    #     for c in range(SUDUKO_SIZE):
+    #         read_row('suduko0', r, c)
+    #         read_column('suduko0', r, c)
+    # print_matrix(ANSWER, 'suduko0')
+    # end_time = datetime.datetime.now()
+    # delta = end_time - start_time
+    # print(delta)
+    print("Read by row:")
+    for i in range(SUDUKO_SIZE):
+        read_row('suduko0', i)
+    print("Read by column:")
+    for i in range(SUDUKO_SIZE):
+        read_row('suduko0', i)
 
 
 if __name__ == '__main__':
